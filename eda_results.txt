@@ -1,0 +1,275 @@
+﻿======================================================================
+Steam 게임 추천 시스템 프로젝트 - EDA 분석
+======================================================================
+
+======================================================================
+1. Game Recommendations on Steam 데이터셋
+======================================================================
+
+[1.1 games.csv]
+Shape: (50872, 13)
+Columns: ['app_id', 'title', 'date_release', 'win', 'mac', 'linux', 'rating', 'positive_ratio', 'user_reviews', 'price_final', 'price_original', 'discount', 'steam_deck']
+app_id unique: 50872
+
+Missing values:
+app_id            0
+title             0
+date_release      0
+win               0
+mac               0
+linux             0
+rating            0
+positive_ratio    0
+user_reviews      0
+price_final       0
+price_original    0
+discount          0
+steam_deck        0
+dtype: int64
+
+Data types:
+app_id              int64
+title              object
+date_release       object
+win                  bool
+mac                  bool
+linux                bool
+rating             object
+positive_ratio      int64
+user_reviews        int64
+price_final       float64
+price_original    float64
+discount          float64
+steam_deck           bool
+dtype: object
+
+Basic stats for numerical columns:
+             app_id  positive_ratio  ...  price_original      discount
+count  5.087200e+04    50872.000000  ...    50872.000000  50872.000000
+mean   1.055224e+06       77.052033  ...        8.726788      5.592212
+std    6.103249e+05       18.253592  ...       11.507021     18.606679
+min    1.000000e+01        0.000000  ...        0.000000      0.000000
+25%    5.287375e+05       67.000000  ...        0.990000      0.000000
+50%    9.860850e+05       81.000000  ...        4.990000      0.000000
+75%    1.524895e+06       91.000000  ...       11.990000      0.000000
+max    2.599300e+06      100.000000  ...      299.990000     90.000000
+
+[8 rows x 6 columns]
+
+--------------------------------------------------
+[1.2 users.csv]
+Shape: (14306064, 3)
+Columns: ['user_id', 'products', 'reviews']
+user_id unique: 14306064
+
+Basic stats:
+            user_id      products       reviews
+count  1.430606e+07  1.430606e+07  1.430606e+07
+mean   7.153032e+06  1.163734e+02  2.876738e+00
+std    4.129805e+06  2.438515e+02  7.987421e+00
+min    0.000000e+00  0.000000e+00  0.000000e+00
+25%    3.576516e+06  2.300000e+01  1.000000e+00
+50%    7.153032e+06  5.500000e+01  1.000000e+00
+75%    1.072955e+07  1.270000e+02  3.000000e+00
+max    1.430606e+07  3.221400e+04  6.045000e+03
+
+--------------------------------------------------
+[1.3 games_metadata.json]
+Total entries: 50872
+Sample entry keys: ['app_id', 'description', 'tags']
+
+Total unique tags: 441
+
+Top 20 tags:
+Indie             27957
+Singleplayer      22566
+Action            21897
+Adventure         20183
+Casual            17844
+Simulation        12691
+2D                11438
+Strategy          11093
+RPG               10156
+Atmospheric        8688
+Puzzle             7585
+Story Rich         7149
+Multiplayer        6575
+3D                 6142
+Pixel Graphics     6028
+Exploration        5769
+Cute               5702
+Colorful           5693
+Free to Play       5645
+First-Person       5570
+Name: count, dtype: int64
+
+======================================================================
+2. Steam Games Dataset 2025
+======================================================================
+
+[2.1 games_march2025_cleaned.csv]
+Columns (47): ['appid', 'name', 'release_date', 'required_age', 'price', 'dlc_count', 'detailed_description', 'about_the_game', 'short_description', 'reviews', 'header_image', 'website', 'support_url', 'support_email', 'windows', 'mac', 'linux', 'metacritic_score', 'metacritic_url', 'achievements', 'recommendations', 'notes', 'supported_languages', 'full_audio_languages', 'packages', 'developers', 'publishers', 'categories', 'genres', 'screenshots', 'movies', 'user_score', 'score_rank', 'positive', 'negative', 'estimated_owners', 'average_playtime_forever', 'average_playtime_2weeks', 'median_playtime_forever', 'median_playtime_2weeks', 'discount', 'peak_ccu', 'tags', 'pct_pos_total', 'num_reviews_total', 'pct_pos_recent', 'num_reviews_recent']
+
+Sample 1000 rows - appid unique: 1000
+Total rows (estimated): 89618
+
+======================================================================
+3. 데이터셋 간 app_id 매칭 분석
+======================================================================
+
+Game Recommendations games.csv app_ids: 50872
+Game Recommendations metadata app_ids: 50872
+Steam 2025 (sample 1000) app_ids: 1000
+
+games.csv ∩ metadata: 50872 (100.0%)
+games.csv ∩ steam2025 (sample): 871 (1.7%)
+
+======================================================================
+4. games.csv 상세 분석
+======================================================================
+
+[4.1 Rating 분포]
+rating
+Positive                   13502
+Very Positive              13139
+Mixed                      12157
+Mostly Positive             8738
+Mostly Negative             1849
+Overwhelmingly Positive     1110
+Negative                     303
+Very Negative                 60
+Overwhelmingly Negative       14
+Name: count, dtype: int64
+
+[4.2 가격 분포]
+무료 게임 수: 9105
+유료 게임 수: 41767
+가격 통계:
+count    50872.000000
+mean         8.620325
+std         11.514164
+min          0.000000
+25%          0.990000
+50%          4.990000
+75%         10.990000
+max        299.990000
+Name: price_final, dtype: float64
+
+[4.3 플랫폼 분포]
+Windows: 50076
+Mac: 13018
+Linux: 9041
+
+[4.4 출시 연도 분포]
+release_year
+2004       4
+2005       3
+2006      56
+2007      82
+2008     146
+2009     322
+2010     284
+2011     376
+2012     565
+2013     822
+2014    1921
+2015    2963
+2016    4209
+2017    4989
+2018    5461
+2019    5057
+2020    6135
+2021    6774
+2022    7265
+2023    3425
+Name: count, dtype: int64
+
+[4.5 user_reviews 분포]
+count    5.087200e+04
+mean     1.824425e+03
+std      4.007352e+04
+min      1.000000e+01
+25%      1.900000e+01
+50%      4.900000e+01
+75%      2.060000e+02
+max      7.494460e+06
+Name: user_reviews, dtype: float64
+
+user_reviews 구간별 분포:
+review_bin
+11-100      30132
+101-1K      12862
+1K-10K       4164
+0-10         2566
+10K-100K     1011
+100K+         137
+Name: count, dtype: int64
+
+======================================================================
+5. users.csv 상세 분석
+======================================================================
+
+[5.1 products (보유 게임 수) 분포]
+count    1.430606e+07
+mean     1.163734e+02
+std      2.438515e+02
+min      0.000000e+00
+25%      2.300000e+01
+50%      5.500000e+01
+75%      1.270000e+02
+max      3.221400e+04
+Name: products, dtype: float64
+
+products 구간별 분포:
+products_bin
+11-50      5078003
+101-500    4029247
+51-100     3062706
+1-10       1511254
+501-1K      357403
+1K+         128133
+Name: count, dtype: int64
+
+[5.2 reviews (작성 리뷰 수) 분포]
+count    1.430606e+07
+mean     2.876738e+00
+std      7.987421e+00
+min      0.000000e+00
+25%      1.000000e+00
+50%      1.000000e+00
+75%      3.000000e+00
+max      6.045000e+03
+Name: reviews, dtype: float64
+
+reviews 구간별 분포:
+reviews_bin
+0         8098032
+1-5       4733023
+6-10       889778
+11-50      549615
+51-100      27421
+100+         8195
+Name: count, dtype: int64
+
+======================================================================
+6. 메타데이터 태그 상세 분석
+======================================================================
+게임당 평균 태그 수: 11.5
+태그 없는 게임 수: 1244
+
+장르별 게임 수:
+  Action: 21897
+  Adventure: 20183
+  RPG: 10156
+  Strategy: 11093
+  Simulation: 12691
+  Sports: 2542
+  Racing: 2100
+  Puzzle: 7585
+  Casual: 17844
+  Indie: 27957
+  Free to Play: 5645
+
+======================================================================
+EDA 분석 완료
+======================================================================
